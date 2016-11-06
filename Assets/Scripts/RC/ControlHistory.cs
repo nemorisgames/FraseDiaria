@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class ControlHistory : MonoBehaviour {
 	public UIToggle[] meses;
@@ -8,12 +9,15 @@ public class ControlHistory : MonoBehaviour {
 	UIPanel panelFrases;
 	System.DateTime startDay;
 	int months = 0;
+	ArrayList frasesCreadas = new ArrayList();
+
+	int totalQuotes = 365;
 	// Use this for initialization
 	void Start () {
 		if (PlayerPrefs.HasKey ("StartDay")) {
-			startDay = System.DateTime.Parse ("11/4/2015 10:32:21 PM");//PlayerPrefs.GetString ("StartDay")); //
+			startDay = System.DateTime.Parse ("11/4/2016 10:32:21 PM").Date;//PlayerPrefs.GetString ("StartDay")); //
 		} else {
-			startDay = System.DateTime.Now;
+			startDay = System.DateTime.Now.Date;
 			PlayerPrefs.SetString ("StartDay", startDay.ToString());
 		}
 		print ("Start day: " + startDay);
@@ -32,8 +36,10 @@ public class ControlHistory : MonoBehaviour {
 		for (int i = 0; i < 12; i++) meses [i].GetComponent<UIButton>().isEnabled = false;
 		for (int i = 0; i <= months; i++) {
 			int mesActual = startDay.Month + i;
-			meses [(mesActual - 1)%12].GetComponent<UIButton>().isEnabled = true;
+			meses [(mesActual - 1) % 12].GetComponent<UIButton>().isEnabled = true;
 		}
+
+		mostrarFrases (System.DateTime.Now.Month - 1);
 	}
 
 	public void mostrarFrasesEnero(){ mostrarFrases (0); }
@@ -50,31 +56,31 @@ public class ControlHistory : MonoBehaviour {
 	public void mostrarFrasesDiciembre(){ mostrarFrases (11); }
 
 	void mostrarFrases(int indiceMesSeleccionado){
-		
-		int indiceInicial = 0;
-		int indiceFinal = (System.DateTime.Now - startDay).Days;
-		//arreglar año
-		if (System.DateTime.Parse ((indiceMesSeleccionado + 1) + "/01/2016") > startDay) {
-			if (System.DateTime.Parse ((indiceMesSeleccionado + 1) + "/" + System.DateTime.DaysInMonth (2016, indiceMesSeleccionado + 1) + "/2016") < System.DateTime.Now) {
-				indiceInicial = (System.DateTime.Parse ((indiceMesSeleccionado + 1) + "/01/2016") - startDay).Days + 1;
-				indiceFinal = indiceInicial + System.DateTime.DaysInMonth (2016, indiceMesSeleccionado + 1) - 1;
-			} else {
-				indiceInicial = (System.DateTime.Parse ((indiceMesSeleccionado + 1) + "/01/2016") - startDay).Days + 1;
-				indiceFinal = indiceInicial + System.DateTime.Now.Day - 1;
-			}
-		} else {
-			//caso en que la fecha inicial está dentro del mes seleccionado y la fecha final despues
-			if (System.DateTime.Parse ((indiceMesSeleccionado + 1) + "/" + System.DateTime.DaysInMonth (2016, indiceMesSeleccionado + 1) + "/2016") < System.DateTime.Now) {
-				indiceInicial = 0;
-				indiceFinal = (System.DateTime.DaysInMonth (2016, indiceMesSeleccionado + 1) - startDay.Day);
-			} 
-			//Caso con fecha inicial y final en el mismo mes y con frases en el mismo mes
-			else {
-				indiceInicial = 0;
-				indiceFinal = (System.DateTime.Now.Day - startDay.Day);
+		for (int i = 0; i < frasesCreadas.Count; i++) {
+			Destroy((GameObject)frasesCreadas[i]);
+		}
+		int indice = 0;
+		frasesCreadas.Clear ();
+		rootFrases.localPosition = new Vector3 (rootFrases.localPosition.x, -79f, rootFrases.localPosition.z);
+		rootFrases.GetComponent<UIPanel> ().clipOffset = new Vector2(0f, 0f);
+		for (int i = 0; i <= Mathf.Clamp((System.DateTime.Now.Date - startDay.Date).Days, 0, totalQuotes); i++) {
+			if (startDay.AddDays (i).Month == indiceMesSeleccionado + 1) {
+				GameObject g = Instantiate (fraseBotonPrefab);
+				g.transform.parent = rootFrases;
+				g.transform.localScale = Vector3.one;
+				g.GetComponent<UISprite> ().width = (int)rootFrases.GetComponent<UIPanel> ().width;
+				g.transform.localPosition = new Vector3 ((int)rootFrases.GetComponent<UIPanel> ().finalClipRegion.x, 785f - indice * 190f, 0f);
+				Quote q = g.GetComponent<Quote> ();
+				q.inicializar (i);
+				frasesCreadas.Add (g);
+				indice++;
 			}
 		}
-		print (indiceInicial + " - " + indiceFinal);
+	}
+
+	public void cargarFrase(int indice){
+		PlayerPrefs.SetInt ("QuoteCheck", indice);
+		SceneManager.LoadScene ("Quote_RC");
 	}
 	
 	// Update is called once per frame

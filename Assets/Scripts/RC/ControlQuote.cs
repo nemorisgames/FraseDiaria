@@ -1,23 +1,38 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Quote : MonoBehaviour {
-	public int indiceFrase = 0;
+public class ControlQuote : MonoBehaviour {
+
 	public UILabel fraseLabel;
+	public UILabel autorLabel;
 	public UILabel fechaLabel;
+	public UITexture imagenFondo;
+	public Texture[] imagenes;
+	System.DateTime startDay;
 	// Use this for initialization
 	void Start () {
-		
+		if (PlayerPrefs.HasKey ("StartDay")) {
+			startDay = System.DateTime.Parse ("11/4/2016 10:32:21 PM").Date;//PlayerPrefs.GetString ("StartDay")); //
+		} else {
+			startDay = System.DateTime.Now.Date;
+			PlayerPrefs.SetString ("StartDay", startDay.ToString());
+		}
+
+		if (PlayerPrefs.GetInt ("QuoteCheck", -1) >= 0) {
+			inicializar (PlayerPrefs.GetInt ("QuoteCheck", -1));
+		} else {
+			inicializar ((System.DateTime.Now.Date - startDay.Date).Days % 365);
+		}
 	}
 
 	public void inicializar(int indice){
-		indiceFrase = indice;
+		imagenFondo.mainTexture = imagenes [indice % imagenes.Length];
 		fraseLabel.GetComponent<I2.Loc.Localize>().SetTerm ("Quote" + (indice + 1));
 		string completo = I2.Loc.ScriptLocalization.Get("Quote" + (indice + 1));
 		string[] partes = completo.Split ('|');
 
 		fraseLabel.text = partes [0];
-
+		autorLabel.text = partes [1];
 		if (!partes [2].Contains ("/") && !partes [2].Contains ("-")) {
 			int dias = -1;
 			if (int.TryParse (partes [2], out dias)) {
@@ -27,10 +42,6 @@ public class Quote : MonoBehaviour {
 			}
 		}
 		else fechaLabel.text = partes [2];
-	}
-
-	public void verFrase(){
-		Camera.main.GetComponent<ControlHistory> ().cargarFrase (indiceFrase);
 	}
 	
 	// Update is called once per frame

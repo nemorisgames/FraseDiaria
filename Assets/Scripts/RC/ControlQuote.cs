@@ -12,7 +12,7 @@ public class ControlQuote : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		if (PlayerPrefs.HasKey ("StartDay")) {
-			startDay = System.DateTime.Parse ("11/4/2016 10:32:21 PM").Date;//PlayerPrefs.GetString ("StartDay")); //
+			startDay = System.DateTime.Parse ("9/4/2016 10:32:21 PM").Date;//PlayerPrefs.GetString ("StartDay")); //
 		} else {
 			startDay = System.DateTime.Now.Date;
 			PlayerPrefs.SetString ("StartDay", startDay.ToString());
@@ -30,18 +30,19 @@ public class ControlQuote : MonoBehaviour {
 		fraseLabel.GetComponent<I2.Loc.Localize>().SetTerm ("Quote" + (indice + 1));
 		string completo = I2.Loc.ScriptLocalization.Get("Quote" + (indice + 1));
 		string[] partes = completo.Split ('|');
-
-		fraseLabel.text = partes [0];
-		autorLabel.text = partes [1];
-		if (!partes [2].Contains ("/") && !partes [2].Contains ("-")) {
-			int dias = -1;
-			if (int.TryParse (partes [2], out dias)) {
-				fechaLabel.text = System.DateTime.Parse ("01/01/1900").AddDays (dias).Date.ToShortDateString ();
-			} else {
-				fechaLabel.text = "-";
-			}
+		if (partes.Length > 1) {
+			fraseLabel.text = partes [0];
+			autorLabel.text = partes [1];
+			if (!partes [2].Contains ("/") && !partes [2].Contains ("-")) {
+				int dias = -1;
+				if (int.TryParse (partes [2], out dias)) {
+					fechaLabel.text = System.DateTime.Parse ("01/01/1900").AddDays (dias).Date.ToShortDateString ();
+				} else {
+					fechaLabel.text = "-";
+				}
+			} else
+				fechaLabel.text = partes [2];
 		}
-		else fechaLabel.text = partes [2];
 	}
 	
 	// Update is called once per frame

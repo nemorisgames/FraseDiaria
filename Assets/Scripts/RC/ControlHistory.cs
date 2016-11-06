@@ -15,7 +15,7 @@ public class ControlHistory : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		if (PlayerPrefs.HasKey ("StartDay")) {
-			startDay = System.DateTime.Parse ("11/4/2016 10:32:21 PM").Date;//PlayerPrefs.GetString ("StartDay")); //
+			startDay = System.DateTime.Parse ("9/4/2016 10:32:21 PM").Date;//PlayerPrefs.GetString ("StartDay")); //
 		} else {
 			startDay = System.DateTime.Now.Date;
 			PlayerPrefs.SetString ("StartDay", startDay.ToString());
@@ -39,6 +39,7 @@ public class ControlHistory : MonoBehaviour {
 			meses [(mesActual - 1) % 12].GetComponent<UIButton>().isEnabled = true;
 		}
 
+		meses [System.DateTime.Now.Month - 1].Set (true, false);
 		mostrarFrases (System.DateTime.Now.Month - 1);
 	}
 

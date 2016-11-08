@@ -19,7 +19,12 @@ public class ControlPanelOpciones : MonoBehaviour {
 	}
 		
 	public void irAbout(){
-		//SceneManager.LoadScene ("Quote_RC");
+		SceneManager.LoadScene ("About_SL");
+	}
+
+	public void okDisclaimer() {
+		PlayerPrefs.SetInt ("Disclaimer", -1);
+		irQuote ();
 	}
 	
 	// Update is called once per frame

@@ -1,8 +1,13 @@
 fileFormatVersion: 2
 guid: 2874bd15104324a6d9dee17cf4f15a44
+<<<<<<< HEAD
 timeCreated: 1478617373
 licenseType: Pro
 TextScriptImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+=======
+DefaultImporter:
+  userData: 
+>>>>>>> push

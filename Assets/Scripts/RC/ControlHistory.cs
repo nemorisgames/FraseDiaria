@@ -15,7 +15,7 @@ public class ControlHistory : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		if (PlayerPrefs.HasKey ("StartDay")) {
-			startDay = System.DateTime.Parse ("9/4/2016 10:32:21 PM").Date;//PlayerPrefs.GetString ("StartDay")); //
+			startDay = System.DateTime.Parse ("1/1/2016 10:32:21 PM").Date;//PlayerPrefs.GetString ("StartDay")); //
 		} else {
 			startDay = System.DateTime.Now.Date;
 			PlayerPrefs.SetString ("StartDay", startDay.ToString());

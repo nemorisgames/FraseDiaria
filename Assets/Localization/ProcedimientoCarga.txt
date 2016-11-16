@@ -1,0 +1,4 @@
+﻿Procedimiento de creación de archivo de traduccion:
+- Se debe guardar como CSV delimitado por ; en formato UTF-8
+- Se abre en block de notas y se guarda como un CSV en el mismo formato
+- Recargar el archivo en I2Languages

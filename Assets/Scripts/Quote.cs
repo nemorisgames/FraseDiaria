@@ -12,7 +12,7 @@ public class Quote : MonoBehaviour {
 
 	public void inicializar(int indice){
 		indiceFrase = indice;
-		fraseLabel.GetComponent<I2.Loc.Localize>().SetTerm ("Quote" + (indice + 1));
+		//fraseLabel.GetComponent<I2.Loc.Localize>().SetTerm ("Quote" + (indice + 1));
 		string completo = I2.Loc.ScriptLocalization.Get("Quote" + (indice + 1));
 		string[] partes = completo.Split ('|');
 

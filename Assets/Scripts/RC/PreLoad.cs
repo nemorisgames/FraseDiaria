@@ -23,9 +23,11 @@ public class PreLoad : MonoBehaviour {
 		//not.ScheduleLocalNotification (c);
 		CancelAllLocalNotifications();
 
-		//not.ScheduleLocalNotification(CreateNotification(60, eNotificationRepeatInterval.MINUTE));
+        //not.ScheduleLocalNotification(CreateNotification(60, eNotificationRepeatInterval.MINUTE));
 
-		CrossPlatformNotification _notification = CreateNotification (60 * 60 * 24, eNotificationRepeatInterval.DAY);
+        //CrossPlatformNotification _notification = CreateNotification(60 * 60 * 24, eNotificationRepeatInterval.DAY);
+
+        CrossPlatformNotification _notification = CreateNotification (1, eNotificationRepeatInterval.DAY);
 		NPBinding.NotificationService.ScheduleLocalNotification (_notification);
 
 		PlayerPrefs.SetInt ("QuoteCheck", -1);

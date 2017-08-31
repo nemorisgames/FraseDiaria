@@ -20,9 +20,9 @@ public class ControlQuote : MonoBehaviour {
 		cargarFrase ();
 
 		if (PlayerPrefs.HasKey ("StartDay")) {
-			startDay = System.DateTime.Parse ("1/1/2016 10:32:21 PM").Date;//PlayerPrefs.GetString ("StartDay")); //
+			startDay = System.DateTime.Parse ("1/1/2017 0:00:01 AM").Date;//PlayerPrefs.GetString ("StartDay")); //
 		} else {
-			startDay = System.DateTime.Parse ("1/1/2016 10:32:21 PM").Date;
+			startDay = System.DateTime.Parse ("1/1/2017 0:00:01 AM").Date;
 			PlayerPrefs.SetString ("StartDay", startDay.ToString());
 		}
 
@@ -60,15 +60,16 @@ public class ControlQuote : MonoBehaviour {
 		if (partes.Length > 1) {
 			fraseLabel.text = partes [0];
 			autorLabel.text = partes [1];
-			if (!partes [2].Contains ("/") && !partes [2].Contains ("-")) {
-				int dias = -1;
-				if (int.TryParse (partes [2], out dias)) {
-					fechaLabel.text = System.DateTime.Parse ("01/01/1900").AddDays (dias).Date.ToShortDateString ();
-				} else {
-					fechaLabel.text = "-";
-				}
-			} else
-				fechaLabel.text = partes [2];
+			//if (!partes [2].Contains ("/") && !partes [2].Contains ("-")) {
+			//	int dias = -1;
+			//	if (int.TryParse (partes [2], out dias)) {
+                    fechaLabel.text = System.DateTime.Parse("01/01/2017").AddDays(indice).Date.ToShortDateString();// System.DateTime.Parse ("01/01/1900").AddDays (dias).Date.ToShortDateString ();
+            //    }
+            //    else {
+			//		fechaLabel.text = "-";
+			//	}
+			//} else
+			//	fechaLabel.text = partes [2];
 		}
 	}
 	

@@ -62,7 +62,7 @@ public class ControlHistory : MonoBehaviour {
 		}
 		int indice = 0;
 		frasesCreadas.Clear ();
-		rootFrases.localPosition = new Vector3 (rootFrases.localPosition.x, -79f, rootFrases.localPosition.z);
+		rootFrases.localPosition = new Vector3 (rootFrases.localPosition.x, 52f, rootFrases.localPosition.z);
 		rootFrases.GetComponent<UIPanel> ().clipOffset = new Vector2(0f, 0f);
 		for (int i = 0; i <= Mathf.Clamp((System.DateTime.Now.Date - startDay.Date).Days, 0, totalQuotes); i++) {
 			if (startDay.AddDays (i).Month == indiceMesSeleccionado + 1) {
@@ -81,11 +81,18 @@ public class ControlHistory : MonoBehaviour {
 
 	public void cargarFrase(int indice){
 		PlayerPrefs.SetInt ("QuoteCheck", indice);
-		SceneManager.LoadScene ("Quote_RC");
+		//SceneManager.LoadScene ("Quote_NJ");
+		StartCoroutine(cargarEscena());
+	}
+
+	public static IEnumerator cargarEscena(){
+		AsyncOperation async = SceneManager.LoadSceneAsync("Quote_NJ");
+		yield return async;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
 	}
+
 }

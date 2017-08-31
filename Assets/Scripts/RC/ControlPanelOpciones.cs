@@ -11,7 +11,8 @@ public class ControlPanelOpciones : MonoBehaviour {
 
 	public void irQuote(){
 		PlayerPrefs.SetInt ("QuoteCheck", -1);
-		SceneManager.LoadScene ("Quote_RC");
+		//SceneManager.LoadScene ("Quote_NJ");
+		StartCoroutine(ControlHistory.cargarEscena());
 	}
 
 	public void irHistory(){

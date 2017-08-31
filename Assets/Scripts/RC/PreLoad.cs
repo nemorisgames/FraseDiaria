@@ -33,7 +33,8 @@ public class PreLoad : MonoBehaviour {
 		if (_disclaimer == 1) {
 			SceneManager.LoadScene ("Disclaimer_SL");
 		} else {
-			SceneManager.LoadScene ("Quote_RC");
+			//SceneManager.LoadScene ("Quote_NJ");
+			StartCoroutine(ControlHistory.cargarEscena());
 		}
 	}
 

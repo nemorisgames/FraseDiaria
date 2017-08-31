@@ -19,15 +19,15 @@ public class Quote : MonoBehaviour {
 		if (partes.Length > 1) {
 			fraseLabel.text = partes [0];
 
-			if (!partes [2].Contains ("/") && !partes [2].Contains ("-")) {
-				int dias = -1;
-				if (int.TryParse (partes [2], out dias)) {
-					fechaLabel.text = System.DateTime.Parse ("01/01/1900").AddDays (dias).Date.ToShortDateString ();
-				} else {
-					fechaLabel.text = "-";
-				}
-			} else
-				fechaLabel.text = partes [2];
+			//if (!partes [2].Contains ("/") && !partes [2].Contains ("-")) {
+			//	int dias = -1;
+			//	if (int.TryParse (partes [2], out dias)) {
+                    fechaLabel.text = System.DateTime.Parse("01/01/2017").AddDays(indice).Date.ToShortDateString();// System.DateTime.Parse ("01/01/1900").AddDays (dias).Date.ToShortDateString ();
+			//	} else {
+			//		fechaLabel.text = "-";
+			//	}
+			//} else
+			//	fechaLabel.text = partes [2];
 		}
 	}
 

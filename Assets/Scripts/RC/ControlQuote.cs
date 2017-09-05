@@ -13,9 +13,11 @@ public class ControlQuote : MonoBehaviour {
 	System.DateTime startDay;
 	int lastDay;
 	public float fontScale = 5f;
+	System.Random rnd;
 
 	// Use this for initialization
 	void Start () {
+		rnd = new System.Random();
 		imagenFondo.alpha = 1;
 		cargarFrase ();
 
@@ -52,7 +54,8 @@ public class ControlQuote : MonoBehaviour {
 	}
 
 	public void inicializar(int indice){
-		imagenFondo.mainTexture = imagenes [indice % imagenes.Length];
+		//imagenFondo.mainTexture = imagenes [indice % imagenes.Length];
+		imagenFondo.mainTexture = SeleccionarFondo();
 		fraseLabel.GetComponent<I2.Loc.Localize>().SetTerm ("Quote" + (indice + 1));
 		string completo = I2.Loc.ScriptLocalization.Get("Quote" + (indice + 1));
 		string[] partes = completo.Split ('|');
@@ -77,7 +80,25 @@ public class ControlQuote : MonoBehaviour {
 	void Update () {
 		/*if(lastDay != System.DateTime.Now.Day && fechaSistLabel != null)
 			fechaSistLabel.text = FechaSistema();*/
-			Debug.Log(fraseLabel.GetComponent<UIWidget>().localSize.y);
+			//Debug.Log(fraseLabel.GetComponent<UIWidget>().localSize.y);
+	}
+
+	Texture SeleccionarFondo(){
+		int indice = PlayerPrefs.GetInt("TipoFondo",0);
+		Texture fondo = new Texture();
+		switch(indice){
+			case 0:
+			fondo = imagenes[rnd.Next(0,4)];
+			break;
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+			case 5:
+			fondo = imagenes[indice - 1];
+			break;
+		}
+		return fondo;
 	}
 
 	string FechaSistema(){
@@ -90,14 +111,14 @@ public class ControlQuote : MonoBehaviour {
 	void FontSize(int n, bool b){
 		fraseLabel.fontSize += (int)(fontScale*Mathf.Sign(n));
 		fechaLabel.fontSize += (int)(fontScale*Mathf.Sign(n));
-		fraseLabel.fontSize = Mathf.Clamp(fraseLabel.fontSize,60,100);
-		fechaLabel.fontSize = Mathf.Clamp(fraseLabel.fontSize,60,100);
+		fraseLabel.fontSize = Mathf.Clamp(fraseLabel.fontSize,55,100);
+		fechaLabel.fontSize = Mathf.Clamp(fraseLabel.fontSize,55,100);
 		if(b)
 			PlayerPrefs.SetInt("FontSize",fraseLabel.fontSize);
 	}
 
 	public void FontSizeUp(){
-		if(fraseLabel.GetComponent<UIWidget>().localSize.y <= 1200)
+		if(fraseLabel.GetComponent<UIWidget>().localSize.y <= 1150)
 			FontSize(1, true);
 	}
 
@@ -109,5 +130,10 @@ public class ControlQuote : MonoBehaviour {
 	void FontSizeDownTemp(){
 		if(fraseLabel.GetComponent<UIWidget>().localSize.y >= 500)
 			FontSize(-1, false);
+	}
+
+	public void ResetNotifications(){
+		Debug.Log("reset");
+		PlayerPrefs.SetInt("Launched",0);
 	}
 }

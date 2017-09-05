@@ -10,9 +10,13 @@ public class PreLoad : MonoBehaviour {
 	private 	NotificationType	m_notificationType;
 	// Use this for initialization
 	void Start () {
+		DontDestroyOnLoad(this.gameObject);
+		CancelAllLocalNotifications();
+		NPBinding.NotificationService.RegisterNotificationTypes(NotificationType.Alert | NotificationType.Badge | NotificationType.Sound);
+		NPBinding.NotificationService.ClearNotifications();
+		
 		//PlayerPrefs.DeleteAll ();
 		//print(I2.Loc.LocalizationManager.CurrentLanguageCode);
-		NPBinding.NotificationService.RegisterNotificationTypes(NotificationType.Alert | NotificationType.Badge | NotificationType.Sound);
 
 		if(I2.Loc.LocalizationManager.CurrentLanguageCode == "" || I2.Loc.LocalizationManager.CurrentLanguageCode == null)
 			I2.Loc.LocalizationManager.CurrentLanguageCode = "en";
@@ -21,14 +25,14 @@ public class PreLoad : MonoBehaviour {
 		//VoxelBusters.NativePlugins.CrossPlatformNotification c = new VoxelBusters.NativePlugins.CrossPlatformNotification ();
 
 		//not.ScheduleLocalNotification (c);
-		CancelAllLocalNotifications();
+		//CancelAllLocalNotifications();
+		
 
         //not.ScheduleLocalNotification(CreateNotification(60, eNotificationRepeatInterval.MINUTE));
 
         //CrossPlatformNotification _notification = CreateNotification(60 * 60 * 24, eNotificationRepeatInterval.DAY);
-
-        CrossPlatformNotification _notification = CreateNotification (1, eNotificationRepeatInterval.DAY);
-		NPBinding.NotificationService.ScheduleLocalNotification (_notification);
+        //CrossPlatformNotification _notification = CreateNotification (60, eNotificationRepeatInterval.DAY);
+		//NPBinding.NotificationService.ScheduleLocalNotification (_notification);
 
 		PlayerPrefs.SetInt ("QuoteCheck", -1);
 		_disclaimer = PlayerPrefs.GetInt ("Disclaimer", 1);
@@ -40,7 +44,7 @@ public class PreLoad : MonoBehaviour {
 		}
 	}
 
-	private void RegisterNotificationTypes (NotificationType _notificationTypes)
+	void RegisterNotificationTypes (NotificationType _notificationTypes)
 	{
 		NPBinding.NotificationService.RegisterNotificationTypes(_notificationTypes);
 	}
@@ -79,5 +83,22 @@ public class PreLoad : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+	}
+
+	void EnableNotifications(){
+		CrossPlatformNotification _notification = CreateNotification ((60*60*24), eNotificationRepeatInterval.DAY);
+		NPBinding.NotificationService.ScheduleLocalNotification(_notification);
+		Debug.Log("enabled");
+	}
+
+	void OnApplicationQuit()
+	{
+		EnableNotifications();
+	}
+
+	void OnApplicationFocus(bool focusStatus)
+	{
+		if(!focusStatus)
+			EnableNotifications();
 	}
 }

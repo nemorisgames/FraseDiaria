@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using VoxelBusters.Utility;
+using VoxelBusters.NativePlugins;
 
 public class ControlQuote : MonoBehaviour {
 
@@ -56,8 +58,19 @@ public class ControlQuote : MonoBehaviour {
 	public void inicializar(int indice){
 		//imagenFondo.mainTexture = imagenes [indice % imagenes.Length];
 		imagenFondo.mainTexture = SeleccionarFondo();
-		fraseLabel.GetComponent<I2.Loc.Localize>().SetTerm ("Quote" + (indice + 1));
-		string completo = I2.Loc.ScriptLocalization.Get("Quote" + (indice + 1));
+		fraseLabel.GetComponent<I2.Loc.Localize>().SetTerm ((indice + 1).ToString());
+		string lang = I2.Loc.LocalizationManager.CurrentLanguage;
+		fraseLabel.text = I2.Loc.ScriptLocalization.Get((indice + 1).ToString());
+		I2.Loc.LocalizationManager.CurrentLanguage = "Author";
+		autorLabel.text = I2.Loc.ScriptLocalization.Get((indice + 1).ToString());
+		I2.Loc.LocalizationManager.CurrentLanguage = "Date";
+		fechaLabel.text = I2.Loc.ScriptLocalization.Get((indice + 1).ToString());
+		I2.Loc.LocalizationManager.CurrentLanguage = lang;
+		
+		fechaLabel.text = fechaLabel.text.Trim();
+		if(fechaLabel.text.Length == 0 || fechaLabel.text.Length > 10 || fechaLabel.text == "The Mind")
+			fechaLabel.text = "--";
+		/*string completo = I2.Loc.ScriptLocalization.Get((indice + 1).ToString());
 		string[] partes = completo.Split ('|');
 		print ("mostrando " + indice);
 		if (partes.Length > 1) {
@@ -73,7 +86,7 @@ public class ControlQuote : MonoBehaviour {
 			//	}
 			//} else
 			//	fechaLabel.text = partes [2];
-		}
+		}*/
 	}
 	
 	// Update is called once per frame
@@ -135,5 +148,16 @@ public class ControlQuote : MonoBehaviour {
 	public void ResetNotifications(){
 		Debug.Log("reset");
 		PlayerPrefs.SetInt("Launched",0);
+	}
+
+	public void shareButton(){
+		SocialShareSheet _sharesheet = new SocialShareSheet();
+		_sharesheet.Text = "\""+fraseLabel.text+"\"";
+		NPBinding.UI.SetPopoverPointAtLastTouchPosition();
+		NPBinding.Sharing.ShowView(_sharesheet, FinishedSharing);
+	}
+
+	void FinishedSharing(eShareResult _result){
+		Debug.Log("done");
 	}
 }

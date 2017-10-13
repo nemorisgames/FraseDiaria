@@ -12,11 +12,18 @@ public class Quote : MonoBehaviour {
 
 	public void inicializar(int indice){
 		indiceFrase = indice;
-		//fraseLabel.GetComponent<I2.Loc.Localize>().SetTerm ("Quote" + (indice + 1));
-		string completo = I2.Loc.ScriptLocalization.Get("Quote" + (indice + 1));
-		string[] partes = completo.Split ('|');
+		fraseLabel.GetComponent<I2.Loc.Localize>().SetTerm ((indice + 1).ToString());
+		string lang = I2.Loc.LocalizationManager.CurrentLanguage;
+		fraseLabel.text = I2.Loc.ScriptLocalization.Get((indice + 1).ToString());
+		I2.Loc.LocalizationManager.CurrentLanguage = "Date";
+		fechaLabel.text = I2.Loc.ScriptLocalization.Get((indice + 1).ToString());
+		I2.Loc.LocalizationManager.CurrentLanguage = lang;
+		fechaLabel.text = fechaLabel.text.Trim();
+		if(fechaLabel.text.Length == 0 || fechaLabel.text.Length > 10 || fechaLabel.text == "The Mind")
+			fechaLabel.text = "--";
+		//string[] partes = completo.Split ('|');
 
-		if (partes.Length > 1) {
+		/*if (partes.Length > 1) {
 			fraseLabel.text = partes [0];
 
 			//if (!partes [2].Contains ("/") && !partes [2].Contains ("-")) {
@@ -28,7 +35,7 @@ public class Quote : MonoBehaviour {
 			//	}
 			//} else
 			//	fechaLabel.text = partes [2];
-		}
+		}*/
 	}
 
 	public void verFrase(){

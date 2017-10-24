@@ -126,7 +126,7 @@ public class PreLoad : MonoBehaviour {
 		else
 			_notification = CreateNotification ((60*60*24), eNotificationRepeatInterval.DAY);
 		NPBinding.NotificationService.ScheduleLocalNotification(_notification);
-		Debug.Log("enabled");
+		//Debug.Log("enabled");
 	}
 
 	void OnApplicationQuit()

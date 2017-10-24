@@ -16,7 +16,7 @@ public class ControlHistory : MonoBehaviour {
 
 	void Start () {
 		if (PlayerPrefs.HasKey ("StartDay")) {
-			startDay = System.DateTime.Parse ("1/12/2016 0:00:01 AM").Date;//PlayerPrefs.GetString ("StartDay")); //
+			startDay = System.DateTime.Parse ("1/12/2016 0:00:01 AM").Date;
 		} else {
 			startDay = System.DateTime.Parse ("1/12/2016 0:00:01 AM").Date;
 			PlayerPrefs.SetString ("StartDay", startDay.ToString());
@@ -33,10 +33,13 @@ public class ControlHistory : MonoBehaviour {
 				months = i;
 			}
 		}
+
 		//para el caso en que ha pasado más de un año
-		if (date.Year >= startDay.AddMonths(13).Year) {
+		if (date.Year >= (startDay.AddMonths(13)).AddDays(1).Year) {
 			months = 12;
 		}
+
+		//Debug.Log(date.Year + ", " + startDay.AddMonths(13).Year);
 		
 		//primero se desactivan y luego se activan
 		for (int i = 0; i < 13; i++) meses [i].GetComponent<UIButton>().isEnabled = false;
@@ -48,6 +51,8 @@ public class ControlHistory : MonoBehaviour {
 
 		meses [months].Set (true, false);
 		mostrarFrases (months);
+
+		
 	}
 
 	public void mostrarFrasesDiciembre0(){ mostrarFrases (0); }

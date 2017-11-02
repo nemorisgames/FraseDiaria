@@ -192,7 +192,7 @@ public class ControlQuote : MonoBehaviour {
 		fraseLabelSS.fontSize = fraseLabel.fontSize;
 		fechaLabelSS.text = fechaLabel.text;
 		fechaLabelSS.fontSize = fechaLabel.fontSize;
-		//Debug.Log(panelSS.alpha);
+		Debug.Log(panelSS.alpha);
 		yield return new WaitForSeconds(0.00001f);
 		StartCoroutine(shareOnSocialMedia());
 	}

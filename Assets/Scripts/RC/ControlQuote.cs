@@ -92,7 +92,7 @@ public class ControlQuote : MonoBehaviour {
 
 	public void inicializar(int indice){
 		//imagenFondo.mainTexture = imagenes [indice % imagenes.Length];
-		imagenFondo.mainTexture = SeleccionarFondo();
+		//imagenFondo.mainTexture = SeleccionarFondo();
 		fraseLabel.GetComponent<I2.Loc.Localize>().SetTerm ((indice + 1).ToString());
 		string lang = I2.Loc.LocalizationManager.CurrentLanguage;
 		fraseLabel.text = I2.Loc.ScriptLocalization.Get((indice + 1).ToString());

@@ -86,7 +86,7 @@ public class ControlHistory : MonoBehaviour {
 				g.transform.parent = rootFrases;
 				g.transform.localScale = Vector3.one;
 				g.GetComponent<UISprite> ().width = (int)rootFrases.GetComponent<UIPanel> ().width;
-				g.transform.localPosition = new Vector3 ((int)rootFrases.GetComponent<UIPanel> ().finalClipRegion.x, 785f - indice * 190f, 0f);
+				g.transform.localPosition = new Vector3 ((int)rootFrases.GetComponent<UIPanel> ().finalClipRegion.x, 551f - indice * 190f, 0f);
 				Quote q = g.GetComponent<Quote> ();
 				q.inicializar (i);
 				frasesCreadas.Add (g);

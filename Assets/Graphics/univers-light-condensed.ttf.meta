@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: a3371390073dd7c4f9d673d976aeb595
+timeCreated: 1509461218
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Univers Light Condensed
+  fontNames:
+  - Univers Light Condensed
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

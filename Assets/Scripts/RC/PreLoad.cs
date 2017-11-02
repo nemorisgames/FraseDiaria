@@ -125,8 +125,10 @@ public class PreLoad : MonoBehaviour {
 		}
 		else
 			_notification = CreateNotification ((60*60*24), eNotificationRepeatInterval.DAY);
+		#if !UNITY_EDITOR
 		NPBinding.NotificationService.ScheduleLocalNotification(_notification);
-		//Debug.Log("enabled");
+		#endif
+		
 	}
 
 	void OnApplicationQuit()

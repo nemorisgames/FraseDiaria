@@ -6,8 +6,13 @@ public class ControlPanelOpciones : MonoBehaviour {
 
 	public UIToggle [] colors;
 	public UITexture imagenFondo;
+	public UISprite background;
 	public Texture [] imagenes;
-	public string [] colorsWeb;
+	public string [] colorsG1;
+	public string [] colorsG2;
+	public string bgTextLight;
+	public string bgTextDark;
+	public bool light = true;
 
 	// Use this for initialization
 	void Start () {
@@ -67,15 +72,68 @@ public class ControlPanelOpciones : MonoBehaviour {
 
 	void setBGColor(){
 		colors[PlayerPrefs.GetInt("BGColor",0)].Set(true);
+		if(PlayerPrefs.GetInt("BGColor",0) == 4)
+			light = false;
+		else
+			light = true;
 		if(imagenes.Length != 0)
 			imagenFondo.mainTexture = imagenes[PlayerPrefs.GetInt("BGColor",0)];
-		else if(colorsWeb.Length != 0){
-			Color c;
-			ColorUtility.TryParseHtmlString(colorsWeb[PlayerPrefs.GetInt("BGColor",0)], out c);
-			imagenFondo.color = c;
+		else if(colorsG1.Length != 0){
+			Color c1;
+			ColorUtility.TryParseHtmlString(colorsG1[PlayerPrefs.GetInt("BGColor",0)], out c1);
+			Color c2;
+			ColorUtility.TryParseHtmlString(colorsG2[PlayerPrefs.GetInt("BGColor",0)], out c2);
+			background.applyGradient = true;
+			background.gradientTop = c1;
+			background.gradientBottom = c2;
+			/*if(PlayerPrefs.GetInt("BGColor",0) == 4){
+				SetTextButtonColor(1);
+			}
+			else{
+				SetTextButtonColor(0);
+			}*/
+				
 		}
 	}
 
+	void SetTextButtonColor(int i){
+		GameObject [] objects = GameObject.FindGameObjectsWithTag("SwitchColor");
+		Color [] recolor = new Color[2];
+		ColorUtility.TryParseHtmlString(bgTextLight, out recolor[0]);
+		ColorUtility.TryParseHtmlString(bgTextDark, out recolor[1]);
+
+		for(int j = 0;j<objects.Length;j++){
+			UIButton btn = objects[j].GetComponent<UIButton>();
+			if(btn != null){
+				btn.hover = (i == 0 ? recolor[1] : recolor [0]);
+				btn.pressed = (i == 0 ? recolor[1] : recolor [0]);
+				btn.defaultColor = (i == 0 ? recolor[0] : recolor [1]);
+			}
+			else{
+				UISprite spr = objects[j].GetComponent<UISprite>();
+				if(spr != null){
+					spr.color = (i == 0 ? recolor[0] : recolor [1]);
+				}
+			}
+		}
+
+		UILabel [] labels = GameObject.FindObjectsOfType<UILabel>();
+		for(int j = 0;j<labels.Length;j++){
+			labels[j].color = (i == 0 ? recolor[0] : recolor [1]);
+		}
+
+		if(i == 0)
+			light = true;
+		else
+			light = false;
+	}
+
+	public Color GetColor(int i){
+		Color [] recolor = new Color[2];
+		ColorUtility.TryParseHtmlString(bgTextLight, out recolor[0]);
+		ColorUtility.TryParseHtmlString(bgTextDark, out recolor[1]);
+		return recolor[i];
+	}
 
 
 }

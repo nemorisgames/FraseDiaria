@@ -4,6 +4,7 @@ using System;
 using VoxelBusters.Utility;
 using VoxelBusters.NativePlugins;
 using System.IO;
+using System.Globalization;
 
 public class ControlQuote : MonoBehaviour {
 
@@ -33,19 +34,29 @@ public class ControlQuote : MonoBehaviour {
 	
 	void Start () {
 		rnd = new System.Random();
-		imagenFondo.alpha = 1;
+		//imagenFondo.alpha = 1;
 		cargarFrase ();
 		//PlayerPrefs.DeleteAll();
 		if (PlayerPrefs.HasKey ("StartDay")) {
-			startDay = System.DateTime.Parse ("1/12/2016 0:00:01 AM").Date;//PlayerPrefs.GetString ("StartDay")); //
+			//startDay = System.DateTime.Parse ("12/1/2016 0:00:01 AM").Date;//PlayerPrefs.GetString ("StartDay")); //
+			startDay = System.DateTime.ParseExact ("12/1/2017 0:00:01 AM","M/d/yyyy h:mm:ss tt",CultureInfo.InvariantCulture).Date;
 		} else {
-			startDay = System.DateTime.Parse ("1/12/2016 0:00:01 AM").Date;
+			//startDay = System.DateTime.Parse ("12/1/2016 0:00:01 AM").Date;
+			startDay = System.DateTime.ParseExact ("12/1/2017 0:00:01 AM","M/d/yyyy h:mm:ss tt",CultureInfo.InvariantCulture).Date;
 			PlayerPrefs.SetString ("StartDay", startDay.ToString());
 		}
 
 		CargarFechaSistema();
 		lastDay = System.DateTime.Now.Day;
 
+		float f = (float)Screen.width/(float)Screen.height;
+		Debug.Log(f);
+		if(f <= 0.58f)
+			SSCam.orthographicSize = 0.7f;
+		else if(f > 0.58f && f < 0.6f)
+			SSCam.orthographicSize = 0.72f;
+		else if(f >= 0.6f)
+			SSCam.orthographicSize = 0.8f;
 		
 	}
 
@@ -70,25 +81,11 @@ public class ControlQuote : MonoBehaviour {
 			inicializar ((System.DateTime.Now.Date - startDay.Date).Days % 396);
 		}
 		fraseLabel.fontSize = PlayerPrefs.GetInt("FontSize",80);
-		resize();
-	}
-
-	public void resize(){
 		fraseLabelSS.text = fraseLabel.text;
-		fraseLabelSS.fontSize = fraseLabel.fontSize;
+		fraseLabelSS.fontSize = 80;
 		fechaLabelSS.text = fechaLabel.text;
-		fechaLabelSS.fontSize = fechaLabel.fontSize;
-
-		float i = fraseLabel.GetComponent<UIWidget>().localSize.y;
-		if(i < 1150)
-			return;
-
-		while(i > 1200){
-			FontSizeDownTemp();
-			i = fraseLabel.GetComponent<UIWidget>().localSize.y;
-		}
-		
 	}
+
 
 	public void inicializar(int indice){
 		//imagenFondo.mainTexture = imagenes [indice % imagenes.Length];
@@ -107,21 +104,17 @@ public class ControlQuote : MonoBehaviour {
 			fechaLabel.text = "";
 
 		fraseLabelSS.text = fraseLabel.text;
-		fraseLabelSS.fontSize = fraseLabel.fontSize;
+		//fraseLabelSS.fontSize = fraseLabel.fontSize;
 		fechaLabelSS.text = fechaLabel.text;
-		fechaLabelSS.fontSize = fechaLabel.fontSize;
+		//fechaLabelSS.fontSize = fechaLabel.fontSize;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		/*if(fraseLabel.localSize.y >= 1150 && !sharing){
-			resize();
-		}
-		if(sharing && panelSS.alpha != 1)
-			panelSS.alpha = 1;*/
-		debugLabel.text = ("Alpha: "+panelSS.alpha+", sharing: "+sharing);
-		/*if(panelSS.alpha != 0 && !escribiendoCarga)
-			StartCoroutine(cargando());*/
+		if(Input.GetKeyDown(KeyCode.KeypadPlus))
+			FontSizeUp();
+		if(Input.GetKeyDown(KeyCode.KeypadMinus))
+			FontSizeDown();
 	}
 
 	Texture SeleccionarFondo(){
@@ -152,18 +145,32 @@ public class ControlQuote : MonoBehaviour {
 	}
 
 	public void FontSizeUp(){
-		if(fraseLabel.GetComponent<UIWidget>().localSize.y <= 1150)
-			FontSize(1, true);
+		/*if(fraseLabel.GetComponent<UIWidget>().localSize.y <= 1150)
+			FontSize(1, true);*/
+		FontSizeApp(1);
 	}
 
 	public void FontSizeDown(){
-		if(fraseLabel.GetComponent<UIWidget>().localSize.y >= 500)
-			FontSize(-1, true);
+		/*if(fraseLabel.GetComponent<UIWidget>().localSize.y >= 500)
+			FontSize(-1, true);*/
+		FontSizeApp(-1);
 	}
 
 	void FontSizeDownTemp(){
 		if(fraseLabel.GetComponent<UIWidget>().localSize.y >= 500)
 			FontSize(-1, false);
+	}
+
+	void FontSizeApp(int n){
+		fraseLabel.fontSize += (int)(fontScale*Mathf.Sign(n));
+		fraseLabel.fontSize = Mathf.Clamp(fraseLabel.fontSize,55,130);
+		fechaLabel.fontSize += fraseLabel.fontSize;
+		PlayerPrefs.SetInt("FontSize",fraseLabel.fontSize);
+	}
+
+	void FontSizeSSDown(){
+		fraseLabelSS.fontSize -= (int)(1*fontScale);
+		Debug.Log(fraseLabelSS.fontSize);
 	}
 
 	public void ResetNotifications(){
@@ -189,9 +196,9 @@ public class ControlQuote : MonoBehaviour {
 	IEnumerator share(){
 		panelSS.alpha = 1;
 		fraseLabelSS.text = fraseLabel.text;
-		fraseLabelSS.fontSize = fraseLabel.fontSize;
+		//fraseLabelSS.fontSize = fraseLabel.fontSize;
 		fechaLabelSS.text = fechaLabel.text;
-		fechaLabelSS.fontSize = fechaLabel.fontSize;
+		//fechaLabelSS.fontSize = fechaLabel.fontSize;
 		Debug.Log(panelSS.alpha);
 		yield return new WaitForSeconds(0.00001f);
 		StartCoroutine(shareOnSocialMedia());
@@ -213,6 +220,11 @@ public class ControlQuote : MonoBehaviour {
 		Texture2D texFinal = new Texture2D(aux,tex.height);
 		texFinal.SetPixels(c);
 		texFinal.Apply();
+
+		#if UNITY_EDITOR
+		byte [] img = texFinal.EncodeToPNG();
+		File.WriteAllBytes("test.png",img);
+		#endif
 		
 		return texFinal;
 	}

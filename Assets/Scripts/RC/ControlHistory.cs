@@ -13,8 +13,9 @@ public class ControlHistory : MonoBehaviour {
 	int months = 0;
 	ArrayList frasesCreadas = new ArrayList();
 	public ControlPanelOpciones opciones;
+	
 
-	int totalQuotes = 396;
+	public int totalQuotes = 396;
 	// Use this for initialization
 
 	void Start () {
@@ -60,9 +61,9 @@ public class ControlHistory : MonoBehaviour {
 
 		meses [months].Set (true, false);
 		mostrarFrases (months);
-
-		
 	}
+
+	
 
 	public void mostrarFrasesDiciembre0(){ mostrarFrases (0); }
 	public void mostrarFrasesEnero(){ mostrarFrases (1); }
@@ -108,12 +109,15 @@ public class ControlHistory : MonoBehaviour {
 	}
 
 	public void cargarFrase(int indice){
+		opciones.fade(false,opciones.sceneFade);
 		PlayerPrefs.SetInt ("QuoteCheck", indice);
 		//SceneManager.LoadScene ("Quote_NJ");
 		StartCoroutine(cargarEscena());
+		
 	}
 
 	public static IEnumerator cargarEscena(){
+		yield return new WaitForSeconds(0.25f);
 		AsyncOperation async = SceneManager.LoadSceneAsync("Quote_NJ");
 		yield return async;
 	}

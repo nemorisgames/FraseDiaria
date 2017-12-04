@@ -13,24 +13,58 @@ public class ControlPanelOpciones : MonoBehaviour {
 	public string bgTextLight;
 	public string bgTextDark;
 	public bool light = true;
+	public TweenAlpha sceneFade;
+	public float fadeTime = 0.25f;
 
 	// Use this for initialization
 	void Start () {
 		setBGColor();
+		StartCoroutine(init());
 	}
 
+	IEnumerator init(){
+		sceneFade.GetComponent<UIPanel>().alpha = 1;
+		yield return new WaitForSeconds(0.01f);
+		fade(true,sceneFade);
+	}
+
+	public void fade(bool b, TweenAlpha panel){
+		if(b){
+			panel.PlayForward();
+			Debug.Log("fwd");
+		}
+		else{
+			panel.PlayReverse();
+			Debug.Log("rev");
+		}
+	}
 	public void irQuote(){
 		PlayerPrefs.SetInt ("QuoteCheck", -1);
 		//SceneManager.LoadScene ("Quote_NJ");
+		fade(false,sceneFade);
 		StartCoroutine(ControlHistory.cargarEscena());
 	}
 
+	public void irQuoteRandom(){
+		ControlHistory ch = Camera.main.GetComponent<ControlHistory> ();
+		ch.cargarFrase((int)Random.Range(0,ch.totalQuotes));
+	}
+
+	IEnumerator delayScene(string s){
+		yield return new WaitForSeconds(fadeTime);
+		SceneManager.LoadScene(s);
+	}
+
 	public void irHistory(){
-		SceneManager.LoadScene ("History_RC");
+		fade(false,sceneFade);
+		//SceneManager.LoadScene ("History_RC");
+		StartCoroutine(delayScene("History_RC"));
 	}
 		
 	public void irAbout(){
-		SceneManager.LoadScene ("About_SL");
+		fade(false,sceneFade);
+		//SceneManager.LoadScene ("About_SL");
+		StartCoroutine(delayScene("About_SL"));
 	}
 
 	public void okDisclaimer() {

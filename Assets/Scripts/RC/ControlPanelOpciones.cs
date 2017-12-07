@@ -46,8 +46,9 @@ public class ControlPanelOpciones : MonoBehaviour {
 	}
 
 	public void irQuoteRandom(){
-		ControlHistory ch = Camera.main.GetComponent<ControlHistory> ();
-		ch.cargarFrase((int)Random.Range(0,ch.totalQuotes));
+		fade(false,sceneFade);
+		PlayerPrefs.SetInt("QuoteCheck",(int)Random.Range(0,396));
+		StartCoroutine(ControlHistory.cargarEscena());
 	}
 
 	IEnumerator delayScene(string s){

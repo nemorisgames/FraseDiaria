@@ -47,7 +47,7 @@ public class ControlQuote : MonoBehaviour {
 		}
 
 		CargarFechaSistema();
-		lastDay = System.DateTime.Now.Day;
+		lastDay = System.DateTimeOffset.Now.Day;
 
 		float f = (float)Screen.width/(float)Screen.height;
 		Debug.Log(f);
@@ -78,7 +78,7 @@ public class ControlQuote : MonoBehaviour {
 		if (PlayerPrefs.GetInt ("QuoteCheck", -1) >= 0) {
 			inicializar (PlayerPrefs.GetInt ("QuoteCheck", -1));
 		} else {
-			inicializar ((System.DateTime.Now.Date - startDay.Date).Days % 396);
+			inicializar ((System.DateTimeOffset.Now.Date - startDay.Date).Days % 396);
 		}
 		fraseLabel.fontSize = PlayerPrefs.GetInt("FontSize",80);
 		fraseLabelSS.text = fraseLabel.text;
